@@ -1,0 +1,22 @@
+Služba pro monitoring chyb a jejich notifikace
+==============================================
+
+Zadání
+------
+
+Navrhni a vytvoř jednoduchý monitoring, který bude přijímat, zobrazovat a upozorňovat na příchozí chybové zprávy.
+Technologické zpracování je volné. 
+	Akceptační test:
+		Zprávy jsou příjímany přes nějaké rozhraní z externích služeb
+		Zpráva nese informaci o jméně služby, názvu, popisu a závažnosti (může být notice, low, medium, fatal) chyby.
+		Na dashboardu jsou vypsány poslední/nejvíce závažně chyby
+		Lze jednoduše konfigurovat (stačí přes soubor), konfigurovat se bude
+			Email na který/é bude chodit upozornění pokud
+				Přijde fatal chyba
+				V intervalu x (15 min) po sobě přijde y (20) stejných medium zpráv
+				V intervalu x (30 min) po sobě přijde y (100) stejných low zpráv
+
+Technologie
+-----------
+* Nette 2
+* Doctrine 2
