@@ -1,0 +1,39 @@
+{block content}
+
+	{define tableBlock}
+		<div style="width: 45%; margin-right: 10px;" class="pull-left">
+			<h2>{$title}</h2>
+			
+			{if $errors}
+			<table class="table table-hover">
+				<thead>
+				<tr>
+					<th>Id</th>
+					<th>Service</th>
+					<th>Priority</th>
+					<th>Title</th>
+					<th>Description</th>
+					<th>Created</th>
+				</tr>
+				</thead>
+				<tr n:foreach="$errors as $error" onclick="window.location = {plink //Dashboard:detail $error->getId()}">
+					<td>{$error->getId()}</td>
+					<td>{$error->getService()}</td>
+					<td>{$error->getPriority()}</td>
+					<td>{$error->getTitle()}</td>
+					<td>{$error->getDescription()|truncate:35}</td>
+					<td>{$error->getCreated()|date:'Y-m-d H:i:s'}</td>
+				</tr>
+			</table>
+			{else}
+				<p>No errors.</p>
+			{/if}
+		</div>
+	{/define}
+
+	{include #tableBlock, errors => $errorsByTime, title => 'Latest errors'}
+	{include #tableBlock, errors => $errorsByPriority, title => 'Errors by priority'}
+	
+{/block}
+
+{block title}Dashboard{/block}

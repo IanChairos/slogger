@@ -1,0 +1,65 @@
+#
+# SECURITY WARNING: it is CRITICAL that this file & directory are NOT accessible directly via a web browser!
+#
+# If you don't protect this directory from direct web access, anybody will be able to see your passwords.
+# http://nette.org/security-warning
+#
+parameters:
+
+	database:
+		driver: mysql
+		host: localhost
+		port: 3306
+		databaseName: 
+		user: 
+		password: 
+
+	alerts:
+		emailFrom: "root@localhost"
+		nameFrom: "Logger Server 1"
+		emailTo: "root@localhost"
+		priority:
+			medium:
+				timeSpan: 15 # minutes
+				count: 20
+			low:
+				timeSpan: 30 # minutes
+				count: 100
+
+php:
+	date.timezone: Europe/Prague
+
+
+nette:
+	application:
+		errorPresenter: Error
+		mapping:
+			*: App\*Module\Presenters\*Presenter
+
+	session:
+		expiration: 14 days
+
+
+services:
+	- App\Model\UserManager
+	- App\AdminModule\RouterFactory
+	router: @App\AdminModule\RouterFactory::createRouter
+	
+	Database:
+		class: langosh\database\PDOWrapper
+		factory: langosh\database\PDOWrapper::create("%database.driver%:host=%database.host%;dbname=%database.databaseName%", %database.user%, %database.password%)
+
+	LogRepository:
+		class: App\Model\repository\MysqlLogRepository(@Database,'errors')
+
+	LogResource:
+		class: App\Model\rest\resource\LogRestResource(@LogRepository)
+
+	LogServer:
+		class: App\Model\rest\server\LogRestServer(@LogResource)
+
+	Mailer:
+		class: Nette\Mail\SendmailMailer
+
+	AlertService:
+		class: App\Model\AlertService(@LogRepository,@Mailer,%alerts%)

@@ -1,0 +1,59 @@
+{**
+ * @param string   $basePath web base path
+ * @param array    $flashes  flash messages
+ *}
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	{ifset #metaDesc}
+	<meta name="description" content="{include metaDesc|striptags}">
+	{/ifset}
+	
+	<title>{ifset #title}{include title|striptags} | {/ifset}Error log</title>
+
+	<link rel="stylesheet" media="screen,projection,tv" href="{$basePath}/css/screen.css">
+	<link rel="stylesheet" media="print" href="{$basePath}/css/print.css">
+	<link rel="stylesheet" media="screen,projection,tv" href="{$basePath}/css/bootstrap-combined.min.css">
+	{block head}{/block}
+</head>
+
+<body style="background: #111; color: #aaa">
+	
+	{if $user->isLoggedIn()}
+		<div class="navbar navbar-inverse">
+			<div class="navbar-inner">
+				<div class="container">
+					<a class="brand" n:href="Dashboard:default">Logger</a>
+					<div class="nav pull-right">
+						<ul class="nav">
+							<li><a>Signed in as <strong>{$user->getIdentity()->name}</strong></a></li>
+							<li><a n:href="Sign:out">Log out</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	{/if}
+	
+	
+	{snippet flashes}
+		<div n:foreach="$flashes as $flash" class="alert flash {$flash->type}">{$flash->message}</div>
+	{/snippet}
+	
+	<div style="padding: 10px 50px">
+		{include content}
+	</div>
+
+	{block scripts}
+	<script src="{$basePath}/js/jquery.js"></script>
+	<script src="{$basePath}/js/netteForms.js"></script>
+	<script src="{$basePath}/js/jquery.nette.js"></script>
+	<script src="{$basePath}/js/jquery.ajaxform.js"></script>
+	<script src="{$basePath}/js/ajaxForms.js"></script>
+	<script src="{$basePath}/js/main.js"></script>
+	{/block}
+</body>
+</html>
